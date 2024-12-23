@@ -89,13 +89,19 @@ class ConnectionManager:
                     "destinationId": destination_id,
                 }
 
-                # Include streams and mappers if provided
+                # Include additional fields if provided
+                additional_fields = [
+                    "dataResidency", "namespaceDefinition", "namespaceFormat",
+                    "prefix", "nonBreakingSchemaUpdatesBehavior", "status"
+                ]
+                for field in additional_fields:
+                    if field in connection:
+                        payload[field] = connection[field]
+
+                # Include streams and schedule if provided
                 if "streams" in connection:
                     payload["configurations"] = {"streams": connection["streams"]}
                 
-                if "mappers" in connection:
-                    payload["configurations"] = {"mappers": connection["mappers"]}
-
                 if "schedule" in connection:
                     payload["schedule"] = connection["schedule"]
 
